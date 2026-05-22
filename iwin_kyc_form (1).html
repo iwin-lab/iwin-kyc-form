@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>iWIN Wealth Planning — Client Intake Form</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f4f6f9;min-height:100vh;padding:2rem 1rem}
+:root{--iwin-blue:#1B6FC8;--iwin-dark:#0E4A8A;--iwin-light:#E6F1FB;--iwin-mid:#B5D4F4}
+.container{max-width:700px;margin:0 auto}
+.form-header{background:var(--iwin-dark);border-radius:12px 12px 0 0;padding:1.25rem 1.5rem;display:flex;align-items:center;gap:14px}
+.logo-circle{width:52px;height:52px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.logo-circle img{width:48px;height:48px;object-fit:contain}
+.header-text{color:#fff}
+.header-title{font-size:17px;font-weight:600}
+.header-sub{font-size:12px;opacity:0.75;margin-top:2px}
+.form-body{background:#f4f6f9;padding:1.25rem;border-radius:0 0 12px 12px;border:1px solid #dce3ed;border-top:none}
+.step-dots{display:flex;gap:6px;justify-content:center;margin-bottom:0.75rem}
+.dot{width:8px;height:8px;border-radius:50%;background:#B5D4F4;transition:all 0.2s}
+.dot.active{background:var(--iwin-blue);width:20px;border-radius:4px}
+.dot.done{background:#85B7EB}
+.progress-bar-outer{background:#B5D4F4;border-radius:4px;height:4px;margin-bottom:0.4rem}
+.progress-bar-inner{background:var(--iwin-blue);border-radius:4px;height:4px;transition:width 0.3s}
+.step-label{font-size:12px;color:#666;margin-bottom:1.25rem}
+.step-header{font-size:17px;font-weight:600;color:#1a1a2e;margin-bottom:0.2rem}
+.step-sub{font-size:13px;color:#555;margin-bottom:1.25rem;line-height:1.6}
+.section{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.25rem;margin-bottom:0.75rem}
+.section-title{font-size:11px;font-weight:600;color:var(--iwin-blue);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:12px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.field-row.one{grid-template-columns:1fr}
+.field-row.three{grid-template-columns:1fr 1fr 1fr}
+.field-group{display:flex;flex-direction:column;gap:3px}
+label.fl{font-size:12px;color:#444;font-weight:500}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid #d0d7de;border-radius:6px;font-size:13px;background:#fff;color:#1a1a2e;font-family:inherit}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--iwin-blue);box-shadow:0 0 0 2px rgba(27,111,200,0.15)}
+textarea{resize:vertical;min-height:60px}
+.tip{font-size:11px;color:#888;margin-top:3px;line-height:1.5}
+.radio-group{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+.radio-btn{padding:5px 12px;border:1px solid #d0d7de;border-radius:20px;font-size:12px;cursor:pointer;background:#fff;color:#333;transition:all 0.15s}
+.radio-btn.active{background:var(--iwin-light);border-color:var(--iwin-blue);color:var(--iwin-dark);font-weight:500}
+.radio-btn:hover{border-color:var(--iwin-blue)}
+.yesno{display:flex;gap:6px}
+.asset-label{font-size:13px;color:#333;padding:4px 0}
+.ben-card{border:1px solid #e2e8f0;border-radius:8px;padding:1rem;margin-bottom:0.75rem}
+.ben-title{font-size:12px;font-weight:600;color:var(--iwin-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px}
+.minor-section{display:none;background:var(--iwin-light);border-radius:8px;padding:10px;margin-top:8px;border:1px solid var(--iwin-mid)}
+.nav{display:flex;justify-content:space-between;align-items:center;margin-top:1.25rem}
+.btn-back{padding:9px 20px;border:1px solid #d0d7de;border-radius:6px;font-size:13px;cursor:pointer;background:transparent;color:#555}
+.btn-back:hover{background:#f0f4f8}
+.btn-next{padding:9px 24px;border:none;border-radius:6px;font-size:13px;cursor:pointer;background:var(--iwin-blue);color:#fff;font-weight:500}
+.btn-next:hover{background:var(--iwin-dark)}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:var(--iwin-light);color:var(--iwin-dark);margin-left:6px;vertical-align:middle}
+.submit-card{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:1.5rem;text-align:center;margin-top:0.5rem}
+.submit-icon{width:48px;height:48px;border-radius:50%;background:var(--iwin-light);display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;font-size:22px;color:var(--iwin-blue)}
+.btn-submit{padding:11px 32px;border:none;border-radius:6px;font-size:14px;cursor:pointer;background:var(--iwin-blue);color:#fff;font-weight:500}
+.btn-submit:hover{background:var(--iwin-dark)}
+.divider{border:none;border-top:1px solid #e2e8f0;margin:1rem 0}
+.checklist-item{font-size:13px;color:#555;display:flex;align-items:center;gap:8px;padding:4px 0}
+.check-dot{width:6px;height:6px;border-radius:50%;background:var(--iwin-blue);flex-shrink:0}
+.success-screen{display:none;text-align:center;padding:3rem 1rem}
+.upload-area{border:2px dashed #B5D4F4;border-radius:8px;padding:1rem;text-align:center;cursor:pointer;background:#f8fbff;transition:all 0.2s;position:relative}
+.upload-area:hover{border-color:var(--iwin-blue);background:var(--iwin-light)}
+.upload-area.has-error{border-color:#e53e3e;background:#fff5f5}
+.upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-area .up-icon{font-size:22px;margin-bottom:4px;color:var(--iwin-blue)}
+.upload-area .up-label{font-size:13px;font-weight:500;color:var(--iwin-blue)}
+.upload-area .up-sub{font-size:11px;color:#888;margin-top:2px}
+.upload-error{font-size:11px;color:#e53e3e;margin-top:4px;font-weight:500}
+.submit-spinner{display:none;width:18px;height:18px;border:2px solid rgba(255,255,255,0.4);border-top-color:#fff;border-radius:50%;animation:spin 0.7s linear infinite;margin-right:8px;vertical-align:middle}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn-submit:disabled{opacity:0.7;cursor:not-allowed}
+.submit-error{background:#fff5f5;border:1px solid #fed7d7;border-radius:8px;padding:12px;margin-top:12px;font-size:13px;color:#c53030;display:none}
+.upload-preview{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.preview-thumb{position:relative;width:80px;height:80px;border-radius:6px;overflow:hidden;border:1px solid #e2e8f0}
+.preview-thumb img{width:100%;height:100%;object-fit:cover}
+.preview-thumb .remove-btn{position:absolute;top:2px;right:2px;background:rgba(0,0,0,0.55);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+.upload-group-label{font-size:12px;color:#444;font-weight:500;margin-bottom:6px}
+.success-circle{width:72px;height:72px;border-radius:50%;background:var(--iwin-light);display:flex;align-items:center;justify-content:center;margin:0 auto 1.25rem;font-size:32px;color:var(--iwin-blue)}
+
+/* ── Validation ─────────────────────────────────────────── */
+input.field-error,textarea.field-error{border-color:#e53e3e!important;background:#fff8f8;box-shadow:0 0 0 2px rgba(229,62,62,0.15)!important}
+.radio-group.field-error,.yesno.field-error{outline:2px solid #e53e3e;border-radius:8px;padding:4px}
+.field-error-msg{font-size:11px;color:#e53e3e;margin-top:3px;font-weight:500}
+.upload-area.field-error{border-color:#e53e3e!important;background:#fff8f8!important}
+.validation-banner{background:#fff0f0;border:1px solid #fed7d7;border-radius:8px;padding:10px 14px;margin-bottom:1rem;font-size:13px;color:#c53030;display:none}
+.validation-banner strong{display:block;margin-bottom:4px}
+.validation-banner ul{margin:0 0 0 16px;line-height:1.8}
+.dot.done{background:#28a745}
+label.fl .req{color:#e53e3e;margin-left:2px}
+@media(max-width:500px){.field-row,.field-row.three{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="container">
+<div class="form-header">
+  <div class="logo-circle">
+    <img src="data:image/jpeg;base64,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" alt="iWIN logo">
+  </div>
+  <div class="header-text">
+    <div class="header-title">iWIN Wealth Planning</div>
+    <div class="header-sub">Client Intake Form — Investment KYC</div>
+  </div>
+</div>
+<div class="form-body">
+  <div id="main-form">
+    <div style="margin-top:1rem">
+      <div class="step-dots" id="dots"></div>
+      <div class="progress-bar-outer"><div class="progress-bar-inner" id="pbar"></div></div>
+      <div class="step-label" id="slabel"></div>
+    </div>
+    <p style="font-size:11px;color:#888;margin-bottom:0.75rem;text-align:right"><span class="req">*</span> Required field</p>
+    <div class="validation-banner" id="val-banner"><strong>Please fix the following before continuing:</strong><ul id="val-list"></ul></div>
+    <div id="steps-container"></div>
+    <div class="nav" id="nav-area">
+      <button class="btn-back" id="btn-back" onclick="goBack()">&#8592; Back</button>
+      <button class="btn-next" id="btn-next" onclick="goNext()">Continue &#8594;</button>
+    </div>
+  </div>
+  <div class="success-screen" id="success-screen">
+    <div class="success-circle">&#10003;</div>
+    <p style="font-size:18px;font-weight:600;margin-bottom:0.5rem;color:#1a1a2e">Form submitted!</p>
+    <p style="font-size:14px;color:#555;line-height:1.6">Your information has been sent to iWIN Wealth Planning.<br>Your advisor will be in touch shortly to review everything.</p>
+  </div>
+</div>
+</div>
+
+<script>
+const STEPS=[{label:'Personal info'},{label:'ID documents'},{label:'Employment'},{label:'Compliance'},{label:'Financials'},{label:'Beneficiaries'}];
+let current=0;
+
+function radioGroup(name,opts,tip){
+  return'<div class="radio-group" id="rg-'+name+'">'+opts.map(o=>'<button type="button" class="radio-btn" data-name="'+name+'" data-val="'+o+'" onclick="setRadio(this)">'+o+'</button>').join('')+'</div>'+(tip?'<p class="tip">'+tip+'</p>':'');
+}
+function yesNo(name,tip){
+  return'<div class="yesno">'+['Yes','No'].map(o=>'<button type="button" class="radio-btn" data-name="'+name+'" data-val="'+o+'" onclick="setRadio(this)">'+o+'</button>').join('')+'</div>'+(tip?'<p class="tip">'+tip+'</p>':'');
+}
+function setRadio(el){
+  document.querySelectorAll('.radio-btn[data-name="'+el.dataset.name+'"]').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  if(el.dataset.name&&el.dataset.name.startsWith('under18_')){
+    const idx=el.dataset.name.split('_')[1];
+    const ms=document.getElementById('minor-'+idx);
+    if(ms)ms.style.display=el.dataset.val==='Yes'?'block':'none';
+  }
+}
+
+function stepHTML(idx){
+  switch(idx){
+    case 0:return`
+      <p class="step-header">Let&#39;s start with the basics</p>
+      <p class="step-sub">Your name and contact details &#8212; nothing sensitive here yet.</p>
+      <div class="section"><p class="section-title">Legal name</p>
+        <div class="field-row three">
+          <div class="field-group"><label class="fl">First name <span class="req">*</span></label><input type="text" id="f_first" placeholder="Jane"></div>
+          <div class="field-group"><label class="fl">Middle name <span style="font-weight:400;opacity:0.6">(optional)</span></label><input type="text" id="f_middle"></div>
+          <div class="field-group"><label class="fl">Last name <span class="req">*</span></label><input type="text" id="f_last" placeholder="Smith"></div>
+        </div>
+        <div class="field-row">
+          <div class="field-group"><label class="fl">Sex <span class="req">*</span></label>${radioGroup('sex',['Male','Female','Other'])}</div>
+          <div class="field-group"><label class="fl">Preferred language <span class="req">*</span></label>${radioGroup('lang',['English','French'])}</div>
+        </div>
+      </div>
+      <div class="section"><p class="section-title">Contact</p>
+        <div class="field-row">
+          <div class="field-group"><label class="fl">Cell phone <span class="req">*</span></label><input type="tel" id="f_cell" placeholder="416-555-0100"></div>
+          <div class="field-group"><label class="fl">Email address <span class="req">*</span></label><input type="email" id="f_email" placeholder="jane@email.com"></div>
+        </div>
+        <div class="field-row">
+          <div class="field-group"><label class="fl">Date of birth <span class="req">*</span></label><input type="date" id="f_dob"></div>
+          <div></div>
+        </div>
+      </div>
+      <div class="section"><p class="section-title">Home address</p>
+        <div class="field-row one"><div class="field-group"><label class="fl">Street address <span class="req">*</span></label><input type="text" placeholder="123 Maple Street, Unit 4"></div></div>
+        <div class="field-row three">
+          <div class="field-group"><label class="fl">City <span class="req">*</span></label><input type="text" placeholder="Toronto"></div>
+          <div class="field-group"><label class="fl">Province <span class="req">*</span></label><input type="text" placeholder="Ontario"></div>
+          <div class="field-group"><label class="fl">Postal code <span class="req">*</span></label><input type="text" placeholder="M5V 2T6"></div>
+        </div>
+        <div class="field-row">
+          <div class="field-group"><label class="fl">Housing status <span class="req">*</span></label>${radioGroup('housing',['Homeowner','Renting','Living with parents'])}</div>
+          <div class="field-group"><label class="fl">Years at this address</label><input type="text" placeholder="e.g. 3 years, 6 months"></div>
+        </div>
+      </div>`;
+    case 1:return`
+      <p class="step-header">Identity verification <span class="badge">&#128274; Secure</span></p>
+      <p class="step-sub">Required by Canadian regulations. Your information is kept strictly confidential and never shared with third parties.</p>
+      <div class="section"><p class="section-title">Primary ID &#8212; driver&#39;s license</p>
+        <div class="field-row">
+          <div class="field-group"><label class="fl">License number <span class="req">*</span></label><input type="text" placeholder="e.g. A1234-56789-00000"><p class="tip">Found on the front of your driver&#39;s license</p></div>
+          <div class="field-group"><label class="fl">Province of issuance <span class="req">*</span></label><input type="text" placeholder="e.g. Ontario"></div>
+        </div>
+        <div class="field-row three">
+          <div class="field-group"><label class="fl">Issue date</label><input type="date"></div>
+          <div class="field-group"><label class="fl">Expiry date <span class="req">*</span></label><input type="date"></div>
+          <div></div>
+        </div>
+      </div>
+      <div class="section"><p class="section-title">Secondary ID</p>
+        <div class="field-row">
+          <div class="field-group"><label class="fl">ID type <span class="req">*</span></label>${radioGroup('id2type',['Passport','Health card','PR card','Other'])}</div>
+          <div class="field-group"><label class="fl">Document number <span class="req">*</span></label><input type="text"></div>
+        </div>
+        <div class="field-row three">
+          <div class="field-group"><label class="fl">Issue date</label><input type="date"></div>
+          <div class="field-group"><label class="fl">Place of issuance</label><input type="text"></div>
+          <div class="field-group"><label class="fl">Expiry date</label><input type="date"></div>
+        </div>
+      </div>
+      <div class="section"><p class="section-title">Social insurance number (SIN)</p>
+        <div class="field-row one">
+          <div class="field-group"><label class="fl">SIN <span class="req">*</span></label><input type="text" placeholder="123 456 789"><p class="tip">Required by CRA for investment account reporting. Never shared with third parties or used for credit checks without your consent.</p></div>
+        </div>
+      </div>
+      <div class="section"><p class="section-title">Upload ID photos</p>
+        <p style="font-size:12px;color:#666;margin-bottom:12px;line-height:1.6">On mobile, you can take photos directly with your camera. On desktop, select image files from your computer. Please upload front <em>and</em> back of each ID.</p>
+        <div class="field-row">
+          <div class="field-group">
+            <p class="upload-group-label">Driver's license &#8212; front <span class="req">*</span></p>
+            <div class="upload-area" id="ua-dl-front">
+              <input type="file" accept="image/*" capture="environment" onchange="handleUpload(this,'dl-front')" multiple>
+              <div class="up-icon">&#128247;</div>
+              <div class="up-label">Take photo or upload</div>
+              <div class="up-sub">JPG, PNG or PDF</div>
+            </div>
+            <div class="upload-preview" id="prev-dl-front"></div>
+          </div>
+          <div class="field-group">
+            <p class="upload-group-label">Driver's license &#8212; back <span class="req">*</span></p>
+            <div class="upload-area" id="ua-dl-back">
+              <input type="file" accept="image/*" capture="environment" onchange="handleUpload(this,'dl-back')" multiple>
+              <div class="up-icon">&#128247;</div>
+              <div class="up-label">Take photo or upload</div>
+              <div class="up-sub">JPG, PNG or PDF</div>
+            </div>
+            <div class="upload-preview" id="prev-dl-back"></div>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field-group">
+            <p class="upload-group-label">Secondary ID &#8212; front <span class="req">*</span></p>
+            <div class="upload-area">
+              <input type="file" accept="image/*" capture="environment" onchange="handleUpload(this,'id2-front')" multiple>
+              <div class="up-icon">&#128247;</div>
+              <div class="up-label">Take photo or upload</div>
+              <div class="up-sub">JPG, PNG or PDF</div>
+            </div>
+            <div class="upload-preview" id="prev-id2-front"></div>
+          </div>
+          <div class="field-group">
+            <p class="upload-group-label">Secondary ID &#8212; back</p>
+            <div class="upload-area">
+              <input type="file" accept="image/*" capture="environment" onchange="handleUpload(this,'id2-back')" multiple>
+              <div class="up-icon">&#128247;</div>
+              <div class="up-label">Take photo or upload</div>
+              <div class="up-sub">JPG, PNG or PDF</div>
+            </div>
+            <div class="upload-preview" id="prev-id2-back"></div>
+          </div>
+        </div>
+      </div>`;
+    case 2:return`
+      <p class="step-header">Employment details</p>
+      <p class="step-sub">This helps us understand your income profile and recommend the right solutions for you.</p>
+      <div class="section"><p class="section-title">Current employer</p>
+        <div class="field-row">
+          <div class="field-group"><label class="fl">Employer name</label><input type="text" placeholder="Acme Corp (or Self-employed)"></div>
+          <div class="field-group"><label class="fl">Job title</label><input type="text" placeholder="e.g. Software Engineer"></div>
+        </div>
+        <div class="field-row one"><div class="field-group"><label class="fl">Employer address</label><input type="text"></div></div>
+        <div class="field-row three">
+          <div class="field-group"><label class="fl">City</label><input type="text"></div>
+          <div class="field-group"><label class="fl">Province</label><input type="text"></div>
+          <div class="field-group"><label class="fl">Postal code</label><input type="text"></div>
+        </div>
+        <div class="field-row">
+          <div class="field-group"><label class="fl">Employer phone</label><input type="tel"></div>
+          <div class="field-group"><label class="fl">Years at this employer</label><input type="text" placeholder="e.g. 5 years"></div>
+        </div>
+      </div>
+      <div class="section"><p class="section-title">Role &amp; income</p>
+        <div class="field-row">
+          <div class="field-group"><label class="fl">Occupation <span class="req">*</span></label><input type="text" placeholder="e.g. Engineer, Nurse, Contractor"></div>
+          <div class="field-group"><label class="fl">Employment status <span class="req">*</span></label>${radioGroup('empstatus',['Employed','Self-employed','Retired','Student','Other'])}</div>
+        </div>
+        <div class="field-row">
+          <div class="field-group"><label class="fl">Industry <span class="req">*</span></label><input type="text" placeholder="e.g. Technology, Healthcare"></div>
+          <div class="field-group"><label class="fl">Annual income <span class="req">*</span></label><input type="text" placeholder="e.g. $85,000"></div>
+        </div>
+        <div class="field-row one"><div class="field-group"><label class="fl">Brief description of job duties</label><textarea placeholder="e.g. Manage a software development team, client liaison..."></textarea></div></div>
+      </div>`;
+    case 3:return`
+      <p class="step-header">Compliance questions</p>
+      <p class="step-sub">A few quick yes/no questions required by financial regulations. The vast majority of clients answer &#8220;No&#8221; to all of these.</p>
+      <div class="section"><p class="section-title">Tax residency</p>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="field-group"><label class="fl">Are you a tax resident of Canada? <span class="req">*</span></label>${yesNo('taxca')}</div>
+          <div class="field-group"><label class="fl">Are you a tax resident or citizen of the United States? <span class="req">*</span></label>${yesNo('taxus','If yes, additional FATCA reporting may apply to your accounts.')}</div>
+          <div class="field-group"><label class="fl">Are you a tax resident of any other country? <span class="req">*</span></label>${yesNo('taxother')}</div>
+        </div>
+      </div>
+      <div class="section"><p class="section-title">Regulatory disclosures</p>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div class="field-group"><label class="fl">Are you (or an immediate family member) a Politically Exposed Domestic Person (PEDP)? <span class="req">*</span></label>${yesNo('pedp','A PEDP holds or held a prominent public role in Canada &#8212; e.g. a senior government official, judge, or military officer.')}</div>
+          <div class="field-group"><label class="fl">Are you (or an immediate family member) the Head of an International Organization? <span class="req">*</span></label>${yesNo('hio')}</div>
+          <div class="field-group"><label class="fl">Do you consent to us using your SIN to obtain your credit report? <span class="req">*</span></label>${yesNo('sinconsent','Used only for identity verification. This does not affect your credit score.')}</div>
+          <div class="field-group"><label class="fl">Have you been bankrupt or filed a consumer proposal in the last 6 years? <span class="req">*</span></label>${yesNo('bankrupt')}</div>
+          <div class="field-group"><label class="fl">Are there any lawsuits or judgements against you? <span class="req">*</span></label>${yesNo('lawsuits')}</div>
+          <div class="field-group"><label class="fl">Are you required to make monthly spousal or child support payments? <span class="req">*</span></label>${yesNo('support')}</div>
+        </div>
+      </div>`;
+    case 4:return`
+      <p class="step-header">Financial snapshot</p>
+      <p class="step-sub">Approximate values are fine &#8212; round numbers work perfectly. Leave blank anything that doesn&#39;t apply.</p>
+      <div class="section"><p class="section-title">Assets &#8212; what you own <span class="req">*</span> <span style="font-size:10px;font-weight:400;color:#888;text-transform:none;letter-spacing:0">(at least one value required)</span></p>
+        <div style="display:grid;grid-template-columns:1fr 130px;gap:5px 8px;align-items:center">
+          <div style="font-size:11px;color:#888">Asset</div><div style="font-size:11px;color:#888;text-align:right">Approx. value</div>
+          ${['Cash accounts','GICs / T-Bills','Registered investments (RRSP/RRIF)','TFSA','Non-registered investments','Primary residence','Other real estate','Pension(s)','Vehicle(s)','Cash value of life insurance','Leverage loan assets','Other assets'].map(a=>'<div class="asset-label">'+a+'</div><input type="text" placeholder="$0" style="text-align:right">').join('')}
+        </div>
+      </div>
+      <div class="section"><p class="section-title">Liabilities &#8212; what you owe</p>
+        <div style="display:grid;grid-template-columns:1fr 110px 110px;gap:5px 8px;align-items:center">
+          <div style="font-size:11px;color:#888">Liability</div><div style="font-size:11px;color:#888;text-align:right">Balance</div><div style="font-size:11px;color:#888;text-align:right">Monthly pmt</div>
+          ${['Loans','Mortgage','Other mortgage','Line of credit','Credit card balance','Unpaid income tax','Property tax arrears','Existing investment loan','Vehicle loan','Other'].map(l=>'<div class="asset-label">'+l+'</div><input type="text" placeholder="$0" style="text-align:right"><input type="text" placeholder="$0" style="text-align:right">').join('')}
+        </div>
+      </div>
+      <div class="section"><p class="section-title">Monthly obligations</p>
+        <div style="display:grid;grid-template-columns:1fr 130px;gap:5px 8px;align-items:center">
+          <div style="font-size:11px;color:#888">Expense</div><div style="font-size:11px;color:#888;text-align:right">Monthly</div>
+          ${['Rent / mortgage','Condo fees','Property taxes','Other loan payments','Support / alimony','Heat &amp; hydro (primary home)','Heat &amp; hydro (other properties)'].map(o=>'<div class="asset-label">'+o+'</div><input type="text" placeholder="$0" style="text-align:right">').join('')}
+        </div>
+      </div>`;
+    case 5:return`
+      <p class="step-header">Beneficiaries <span style="font-size:13px;font-weight:400;color:#666">(optional)</span></p>
+      <p class="step-sub">Who should receive your investment proceeds? Up to 4 beneficiaries. Skip and discuss with your advisor if you prefer.</p>
+      ${[1,2,3,4].map(i=>`
+      <div class="ben-card"><p class="ben-title">Beneficiary ${i}</p>
+        <div class="field-row three">
+          <div class="field-group"><label class="fl">Full name</label><input type="text"></div>
+          <div class="field-group"><label class="fl">Relationship</label>${radioGroup('rel'+i,['Spouse','Child','Parent','Sibling','Other'])}</div>
+          <div class="field-group"><label class="fl">% allocation</label><input type="text" placeholder="e.g. 50%"></div>
+        </div>
+        <div class="field-row">
+          <div class="field-group"><label class="fl">Email</label><input type="email"></div>
+          <div class="field-group"><label class="fl">Phone</label><input type="tel"></div>
+        </div>
+        <div class="field-row one"><div class="field-group"><label class="fl">Full address</label><input type="text"></div></div>
+        <div class="field-group" style="margin-top:8px"><label class="fl">Is this beneficiary under 18?</label>${yesNo('under18_'+i)}</div>
+        <div class="minor-section" id="minor-${i}">
+          <p style="font-size:11px;font-weight:600;color:var(--iwin-blue);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:8px">Trustee details (required for minors)</p>
+          <div class="field-row">
+            <div class="field-group"><label class="fl">Date of birth</label><input type="date"></div>
+            <div class="field-group"><label class="fl">Trustee name</label><input type="text"></div>
+          </div>
+          <div class="field-row">
+            <div class="field-group"><label class="fl">Trustee address</label><input type="text"></div>
+            <div class="field-group"><label class="fl">Trustee email</label><input type="email"></div>
+          </div>
+          <div class="field-row one"><div class="field-group"><label class="fl">Trustee phone</label><input type="tel"></div></div>
+        </div>
+      </div>`).join('')}
+      <div class="submit-card">
+        <div class="submit-icon">&#9993;</div>
+        <p style="font-size:16px;font-weight:600;margin-bottom:0.5rem;color:#1a1a2e">Almost done!</p>
+        <p style="font-size:13px;color:#555;margin-bottom:1.25rem;line-height:1.6">Please upload your void cheque below, then submit.</p>
+        <div style="text-align:left;margin-bottom:1.25rem">
+          <p class="upload-group-label">Banking document <span class="req">*</span> <span style="font-weight:400;opacity:0.7">(for direct deposit setup)</span></p>
+          <p style="font-size:12px;color:#666;margin-bottom:8px;line-height:1.6">Any one of the following works: a <strong>void cheque</strong>, a <strong>pre-authorized debit form</strong> from your bank, or a <strong>direct deposit form / account summary</strong> downloaded from your online banking app. Must show your name, institution, transit number, and account number.</p>
+          <div class="upload-area">
+            <input type="file" accept="image/*,application/pdf" capture="environment" onchange="handleUpload(this,'void-cheque')" multiple>
+            <div class="up-icon">&#127974;</div>
+            <div class="up-label">Upload screenshot, PDF, or photo</div>
+            <div class="up-sub">From online banking, your banking app, or a physical cheque</div>
+          </div>
+          <div class="upload-preview" id="prev-void-cheque"></div>
+        </div>
+        <button class="btn-submit" id="btn-submit" onclick="submitForm()"><span class="submit-spinner" id="submit-spinner"></span>&#9993; Submit to iWIN</button>
+        <div class="submit-error" id="submit-error"></div>
+        <p style="font-size:12px;color:#999;margin-top:1rem;line-height:1.6">Once integrated with Karbon, your data will flow directly into your client file automatically.</p>
+      </div>`;
+  }
+}
+
+// ─── POWER AUTOMATE WEBHOOK URL ───────────────────────────────────────────────
+// Replace the placeholder below with your actual Power Automate HTTP trigger URL
+const POWER_AUTOMATE_URL = 'https://default95c00780be724754b2dad597d483e6.5b.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e757dff071bf448aae5a45c9f6263a92/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hdG2l-q45FhUAvExy1rIOfYMnBL8bCC0ctozUt87cpM';
+
+// ─── FILE SIZE LIMITS ─────────────────────────────────────────────────────────
+const FILE_LIMITS = {
+  'dl-front':    2 * 1024 * 1024,
+  'dl-back':     2 * 1024 * 1024,
+  'id2-front':   2 * 1024 * 1024,
+  'id2-back':    2 * 1024 * 1024,
+  'void-cheque': 3 * 1024 * 1024
+};
+const FILE_LIMIT_LABELS = {
+  'dl-front':'2MB','dl-back':'2MB','id2-front':'2MB','id2-back':'2MB','void-cheque':'3MB'
+};
+
+// ─── PERSISTED FORM DATA ──────────────────────────────────────────────────────
+const formData = {};
+// Track which steps have passed validation
+const stepComplete = [false,false,false,false,false,false];
+
+// ─── VALIDATION ENGINE ────────────────────────────────────────────────────────
+function showFieldError(el, msg){
+  if(!el) return;
+  el.classList.add('field-error');
+  // remove existing error msg
+  const existing = el.parentElement.querySelector('.field-error-msg');
+  if(existing) existing.remove();
+  const p = document.createElement('p');
+  p.className = 'field-error-msg';
+  p.textContent = '⚠ ' + msg;
+  el.insertAdjacentElement('afterend', p);
+}
+function clearFieldError(el){
+  if(!el) return;
+  el.classList.remove('field-error');
+  const existing = el.parentElement.querySelector('.field-error-msg');
+  if(existing) existing.remove();
+}
+function showRadioError(groupEl, msg){
+  if(!groupEl) return;
+  groupEl.classList.add('field-error');
+  const existing = groupEl.parentElement.querySelector('.field-error-msg');
+  if(existing) existing.remove();
+  const p = document.createElement('p');
+  p.className = 'field-error-msg';
+  p.textContent = '⚠ ' + msg;
+  groupEl.insertAdjacentElement('afterend', p);
+}
+function showUploadError(key, msg){
+  const area = document.getElementById('ua-'+key) || document.querySelector('[onchange*="'+key+'"]')?.closest('.upload-area');
+  if(!area) return;
+  area.classList.add('field-error');
+  const existing = area.parentElement.querySelector('.field-error-msg');
+  if(existing) existing.remove();
+  const p = document.createElement('p');
+  p.className = 'field-error-msg';
+  p.textContent = '⚠ ' + msg;
+  area.insertAdjacentElement('afterend', p);
+}
+
+function validateStep(idx){
+  // Clear previous validation UI
+  document.querySelectorAll('.field-error').forEach(el=>el.classList.remove('field-error'));
+  document.querySelectorAll('.field-error-msg').forEach(el=>el.remove());
+  const banner = document.getElementById('val-banner');
+  const list = document.getElementById('val-list');
+  banner.style.display = 'none';
+  list.innerHTML = '';
+
+  const errors = [];
+
+  function reqInput(id, label){
+    const el = document.getElementById(id);
+    const val = el ? el.value.trim() : (formData[id]||'');
+    if(!val){ errors.push(label); if(el) showFieldError(el, label+' is required'); }
+    return !!val;
+  }
+  function reqRadio(name, label){
+    const val = getRadio(name);
+    if(!val){
+      errors.push(label);
+      const grp = document.querySelector('.radio-group[id="rg-'+name+'"],.yesno > .radio-btn[data-name="'+name+'"]')?.closest('.radio-group,.yesno');
+      if(grp) showRadioError(grp, 'Please select an option');
+    }
+    return !!val;
+  }
+  function reqUpload(key, label){
+    const files = uploadedFiles[key]||[];
+    if(!files.length){ errors.push(label); showUploadError(key, label+' is required'); }
+    return files.length > 0;
+  }
+  function reqPositionalInput(sectionKeyword, inputIndex, label){
+    const sec = [...document.querySelectorAll('.section')].find(s=>s.textContent.includes(sectionKeyword));
+    if(!sec) return true; // section not rendered, skip
+    const inputs = [...sec.querySelectorAll('input[type=text],input[type=email],input[type=tel],input[type=date],input[type=number]')];
+    const el = inputs[inputIndex];
+    const v = el ? el.value.trim() : '';
+    if(!v){ errors.push(label); if(el) showFieldError(el, label+' is required'); }
+    return !!v;
+  }
+
+  // ── STEP 0: Personal Info ────────────────────────────────────────────────────
+  if(idx===0){
+    reqInput('f_first','First name');
+    reqInput('f_last','Last name');
+    // Phone OR email — at least one
+    const phone = document.getElementById('f_cell')?.value.trim()||'';
+    const email = document.getElementById('f_email')?.value.trim()||'';
+    if(!phone && !email){
+      errors.push('Cell phone or email (at least one required)');
+      showFieldError(document.getElementById('f_cell'),'Enter at least a phone number or email');
+      showFieldError(document.getElementById('f_email'),'Enter at least a phone number or email');
+    }
+    reqInput('f_dob','Date of birth');
+    reqRadio('sex','Sex');
+    reqRadio('lang','Preferred language');
+    // Address — positional
+    const addr = [...document.querySelectorAll('.section')].find(s=>s.querySelector('.section-title')&&s.querySelector('.section-title').textContent==='Home address');
+    if(addr){
+      const ins = [...addr.querySelectorAll('input[type=text]')];
+      if(!ins[0]?.value.trim()){ errors.push('Street address'); showFieldError(ins[0],'Street address is required'); }
+      if(!ins[1]?.value.trim()){ errors.push('City'); showFieldError(ins[1],'City is required'); }
+      if(!ins[2]?.value.trim()){ errors.push('Province'); showFieldError(ins[2],'Province is required'); }
+      if(!ins[3]?.value.trim()){ errors.push('Postal code'); showFieldError(ins[3],'Postal code is required'); }
+    }
+    reqRadio('housing','Housing status');
+  }
+
+  // ── STEP 1: ID Documents ─────────────────────────────────────────────────────
+  if(idx===1){
+    // DL fields — first section
+    const dlSec = document.querySelectorAll('.section')[0];
+    if(dlSec){
+      const ins = [...dlSec.querySelectorAll('input')];
+      if(!ins[0]?.value.trim()){ errors.push("Driver's licence number"); showFieldError(ins[0],"Driver's licence number is required"); }
+      if(!ins[1]?.value.trim()){ errors.push('Province of issuance'); showFieldError(ins[1],'Province of issuance is required'); }
+      if(!ins[3]?.value.trim()){ errors.push("Driver's licence expiry date"); showFieldError(ins[3],'Expiry date is required'); }
+    }
+    reqUpload('dl-front',"Driver's licence — front photo");
+    reqUpload('dl-back',"Driver's licence — back photo");
+    // Secondary ID
+    reqRadio('id2type','Secondary ID type');
+    const id2Sec = document.querySelectorAll('.section')[1];
+    if(id2Sec){
+      const ins = [...id2Sec.querySelectorAll('input[type=text],input[type=date]')];
+      if(!ins[0]?.value.trim()){ errors.push('Secondary ID number'); showFieldError(ins[0],'Secondary ID number is required'); }
+    }
+    reqUpload('id2-front','Secondary ID — front photo');
+    // SIN
+    const sinSec = document.querySelectorAll('.section')[2];
+    if(sinSec){
+      const sinIn = sinSec.querySelector('input[type=text]');
+      if(!sinIn?.value.trim()){ errors.push('Social Insurance Number (SIN)'); showFieldError(sinIn,'SIN is required'); }
+    }
+  }
+
+  // ── STEP 2: Employment ───────────────────────────────────────────────────────
+  if(idx===2){
+    reqRadio('empstatus','Employment status');
+    const status = getRadio('empstatus');
+    const needsEmployer = (status==='Employed'||status==='Self-employed'||status==='Other'||status==='');
+    // Employer fields only required if Employed/Self-employed/Other
+    if(needsEmployer && status !== ''){
+      // employer name only
+      const empSec = document.querySelectorAll('.section')[0];
+      if(empSec){
+        const ins = [...empSec.querySelectorAll('input[type=text],input[type=tel]')];
+        if(!ins[0]?.value.trim()){ errors.push('Employer name'); showFieldError(ins[0],'Employer name is required'); }
+      }
+    }
+    // Always required
+    const roleSec = document.querySelectorAll('.section')[1];
+    if(roleSec){
+      const ins = [...roleSec.querySelectorAll('input[type=text]')];
+      if(!ins[0]?.value.trim()){ errors.push('Occupation'); showFieldError(ins[0],'Occupation is required'); }
+      if(!ins[1]?.value.trim()){ errors.push('Industry'); showFieldError(ins[1],'Industry is required'); }
+      if(!ins[2]?.value.trim()){ errors.push('Annual income'); showFieldError(ins[2],'Annual income is required'); }
+    }
+  }
+
+  // ── STEP 3: Compliance ───────────────────────────────────────────────────────
+  if(idx===3){
+    ['taxca','taxus','taxother'].forEach((name,i)=>{
+      const labels=['Tax resident of Canada','Tax resident of United States','Tax resident of another country'];
+      reqRadio(name,labels[i]);
+    });
+    ['pedp','hio','sinconsent','bankrupt','lawsuits','support'].forEach((name,i)=>{
+      const labels=['PEDP question','Head of International Organization','SIN consent','Bankruptcy question','Lawsuits question','Support payments question'];
+      reqRadio(name,labels[i]);
+    });
+  }
+
+  // ── STEP 4: Financials ───────────────────────────────────────────────────────
+  if(idx===4){
+    const assetSec = [...document.querySelectorAll('.section')].find(s=>s.textContent.includes('what you own'));
+    if(assetSec){
+      const assetIns = [...assetSec.querySelectorAll('input[type=text]')];
+      const anyAsset = assetIns.some(el=>el.value.trim()&&el.value.trim()!=='$0');
+      if(!anyAsset){
+        errors.push('At least one asset value');
+        assetIns.forEach(el=>el.classList.add('field-error'));
+        const p = document.createElement('p');
+        p.className='field-error-msg';
+        p.textContent='⚠ Please enter at least one asset value (enter $0 if none apply)';
+        assetSec.appendChild(p);
+      }
+    }
+  }
+
+  // ── STEP 5: Beneficiaries + Banking doc ──────────────────────────────────────
+  if(idx===5){
+    reqUpload('void-cheque','Banking document (void cheque or direct deposit form)');
+    // For each beneficiary card: if name entered, allocation is required
+    [1,2,3,4].forEach(i=>{
+      const card = document.querySelectorAll('.ben-card')[i-1];
+      if(!card) return;
+      const nameIn = card.querySelectorAll('input[type=text]')[0];
+      const allocIn = card.querySelectorAll('input[type=text]')[1];
+      if(nameIn?.value.trim() && !allocIn?.value.trim()){
+        errors.push('Beneficiary '+i+' — allocation % required');
+        showFieldError(allocIn,'Allocation % is required when a beneficiary is named');
+      }
+    });
+  }
+
+  // ── Show banner if any errors ────────────────────────────────────────────────
+  if(errors.length){
+    list.innerHTML = errors.map(e=>'<li>'+e+'</li>').join('');
+    banner.style.display = 'block';
+    banner.scrollIntoView({behavior:'smooth', block:'start'});
+    return false;
+  }
+
+  stepComplete[idx] = true;
+  return true;
+}
+
+// ─── STEP NAVIGATION ─────────────────────────────────────────────────────────
+function renderDots(){
+  document.getElementById('dots').innerHTML=STEPS.map((s,i)=>{
+    let cls='dot';
+    if(i===current) cls+=' active';
+    else if(stepComplete[i]) cls+=' done';
+    return '<div class="'+cls+'" title="'+s.label+'"></div>';
+  }).join('');
+}
+function renderProgress(){
+  const pct=Math.round((current/STEPS.length)*100);
+  document.getElementById('pbar').style.width=pct+'%';
+  document.getElementById('slabel').textContent='Step '+(current+1)+' of '+STEPS.length+' — '+STEPS[current].label;
+}
+function renderStep(){
+  document.getElementById('steps-container').innerHTML=stepHTML(current);
+  renderDots();
+  renderProgress();
+  // Hide validation banner when rendering a fresh step
+  const banner=document.getElementById('val-banner');
+  if(banner) banner.style.display='none';
+  const isLast=current===STEPS.length-1;
+  document.getElementById('btn-back').style.visibility=current===0?'hidden':'visible';
+  document.getElementById('btn-next').style.display=isLast?'none':'inline-block';
+  document.getElementById('nav-area').style.display=isLast?'none':'flex';
+  // Re-apply saved radio selections
+  Object.entries(formData).forEach(([name,val])=>{
+    document.querySelectorAll('.radio-btn[data-name="'+name+'"]').forEach(b=>{
+      b.classList.toggle('active', b.dataset.val===val);
+    });
+    if(name.startsWith('under18_') && val==='Yes'){
+      const idx=name.split('_')[1];
+      const ms=document.getElementById('minor-'+idx);
+      if(ms) ms.style.display='block';
+    }
+  });
+  window.scrollTo(0,0);
+}
+
+function goNext(){
+  if(current<STEPS.length-1){
+    snapshotCurrentStep();
+    if(!validateStep(current)) return; // block navigation if invalid
+    current++;
+    renderStep();
+  }
+}
+function goBack(){
+  if(current>0){
+    snapshotCurrentStep();
+    current--;
+    renderStep();
+  }
+}
+
+// ─── RADIO BUTTONS ────────────────────────────────────────────────────────────
+function setRadio(el){
+  document.querySelectorAll('.radio-btn[data-name="'+el.dataset.name+'"]').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  formData[el.dataset.name]=el.dataset.val;
+  // Clear radio error when user selects
+  const grp=el.closest('.radio-group,.yesno');
+  if(grp){
+    grp.classList.remove('field-error');
+    const msg=grp.parentElement.querySelector('.field-error-msg');
+    if(msg) msg.remove();
+  }
+  if(el.dataset.name&&el.dataset.name.startsWith('under18_')){
+    const idx=el.dataset.name.split('_')[1];
+    const ms=document.getElementById('minor-'+idx);
+    if(ms)ms.style.display=el.dataset.val==='Yes'?'block':'none';
+  }
+}
+
+// ─── FILE UPLOAD WITH SIZE VALIDATION ────────────────────────────────────────
+const uploadedFiles={};
+function handleUpload(input,key){
+  if(!uploadedFiles[key])uploadedFiles[key]=[];
+  const limit=FILE_LIMITS[key]||2*1024*1024;
+  const limitLabel=FILE_LIMIT_LABELS[key]||'2MB';
+  const uploadArea=input.closest('.upload-area');
+  const existingErr=uploadArea.parentElement.querySelector('.upload-error');
+  if(existingErr)existingErr.remove();
+  uploadArea.classList.remove('has-error');
+  uploadArea.classList.remove('field-error');
+  const existingFErr=uploadArea.parentElement.querySelector('.field-error-msg');
+  if(existingFErr)existingFErr.remove();
+
+  Array.from(input.files).forEach(file=>{
+    if(file.size>limit){
+      const sizeMB=(file.size/1024/1024).toFixed(1);
+      uploadArea.classList.add('has-error');
+      const errEl=document.createElement('p');
+      errEl.className='upload-error';
+      errEl.textContent='⚠ "'+file.name+'" is '+sizeMB+'MB — max is '+limitLabel+'. Try retaking at lower resolution.';
+      uploadArea.insertAdjacentElement('afterend',errEl);
+      return;
+    }
+    uploadedFiles[key].push(file);
+    const prevEl=document.getElementById('prev-'+key);
+    if(prevEl){
+      const reader=new FileReader();
+      reader.onload=e=>{
+        const thumb=document.createElement('div');
+        thumb.className='preview-thumb';
+        const isImg=file.type.startsWith('image/');
+        thumb.innerHTML=isImg
+          ?'<img src="'+e.target.result+'" alt="'+file.name+'">'
+          :'<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:11px;color:#555;padding:4px;text-align:center">'+file.name+'</div>';
+        const rm=document.createElement('button');
+        rm.className='remove-btn';rm.innerHTML='&times;';rm.title='Remove';
+        rm.onclick=()=>{thumb.remove();uploadedFiles[key]=uploadedFiles[key].filter(f=>f!==file);};
+        thumb.appendChild(rm);
+        prevEl.appendChild(thumb);
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+  input.value='';
+}
+
+// ─── FILE → BASE64 HELPER ────────────────────────────────────────────────────
+function fileToBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>resolve({name:file.name,type:file.type,size:file.size,data:reader.result.split(',')[1]});
+    reader.onerror=()=>reject(reader.error);
+    reader.readAsDataURL(file);
+  });
+}
+async function encodeFileGroup(key){
+  const files=uploadedFiles[key]||[];
+  if(!files.length)return null;
+  const encoded=await Promise.all(files.map(fileToBase64));
+  return encoded.length===1?encoded[0]:encoded;
+}
+
+// ─── SNAPSHOT FIELDS BETWEEN STEPS ───────────────────────────────────────────
+function val(id){const el=document.getElementById(id);return el?el.value.trim():'';}
+function getRadio(name){return formData[name]||'';}
+
+function snapshotCurrentStep(){
+  const snap=(id,key)=>{const el=document.getElementById(id);if(el)formData[key||id]=el.value;};
+  if(current===0){
+    snap('f_first'); snap('f_middle'); snap('f_last');
+    snap('f_cell'); snap('f_email'); snap('f_dob');
+    const addr=document.querySelectorAll('.section')[2];
+    if(addr){
+      const ins=[...addr.querySelectorAll('input[type=text]')];
+      if(ins[0])formData.streetAddress=ins[0].value;
+      if(ins[1])formData.city=ins[1].value;
+      if(ins[2])formData.province=ins[2].value;
+      if(ins[3])formData.postalCode=ins[3].value;
+      if(ins[4])formData.yearsAtAddress=ins[4].value;
+    }
+  }
+  if(current===1){
+    const sec=document.querySelectorAll('.section');
+    if(sec[0]){const ins=[...sec[0].querySelectorAll('input')];if(ins[0])formData.dlNumber=ins[0].value;if(ins[1])formData.dlProvince=ins[1].value;if(ins[2])formData.dlIssue=ins[2].value;if(ins[3])formData.dlExpiry=ins[3].value;}
+    if(sec[1]){const ins=[...sec[1].querySelectorAll('input[type=text],input[type=date]')];if(ins[0])formData.id2Number=ins[0].value;if(ins[1])formData.id2Issue=ins[1].value;if(ins[2])formData.id2Place=ins[2].value;if(ins[3])formData.id2Expiry=ins[3].value;}
+    if(sec[2]){const sinIn=sec[2].querySelector('input[type=text]');if(sinIn)formData.sin=sinIn.value;}
+  }
+  if(current===2){
+    const sec=document.querySelectorAll('.section');
+    if(sec[0]){const ins=[...sec[0].querySelectorAll('input')];if(ins[0])formData.employerName=ins[0].value;if(ins[1])formData.jobTitle=ins[1].value;if(ins[2])formData.employerAddress=ins[2].value;if(ins[3])formData.employerCity=ins[3].value;if(ins[4])formData.employerProvince=ins[4].value;if(ins[5])formData.employerPostal=ins[5].value;if(ins[6])formData.employerPhone=ins[6].value;if(ins[7])formData.yearsAtEmployer=ins[7].value;}
+    if(sec[1]){const ins=[...sec[1].querySelectorAll('input')];if(ins[0])formData.occupation=ins[0].value;if(ins[1])formData.industry=ins[1].value;if(ins[2])formData.annualIncome=ins[2].value;const ta=sec[1].querySelector('textarea');if(ta)formData.jobDuties=ta.value;}
+  }
+  if(current===4){
+    const assetSec=[...document.querySelectorAll('.section')].find(s=>s.textContent.includes('what you own'));
+    if(assetSec){const keys=['asset_cash','asset_gic','asset_rrsp','asset_tfsa','asset_nonreg','asset_primaryres','asset_otherreal','asset_pension','asset_vehicles','asset_lifeins','asset_leverage','asset_other'];assetSec.querySelectorAll('input[type=text]').forEach((el,i)=>{if(keys[i])formData[keys[i]]=el.value;});}
+    const liabSec=[...document.querySelectorAll('.section')].find(s=>s.textContent.includes('what you owe'));
+    if(liabSec){const lkeys=[['liab_loans_bal','liab_loans_pmt'],['liab_mort_bal','liab_mort_pmt'],['liab_mortother_bal','liab_mortother_pmt'],['liab_loc_bal','liab_loc_pmt'],['liab_cc_bal','liab_cc_pmt'],['liab_tax_bal','liab_tax_pmt'],['liab_proptax_bal','liab_proptax_pmt'],['liab_invloan_bal','liab_invloan_pmt'],['liab_carloan_bal','liab_carloan_pmt'],['liab_other_bal','liab_other_pmt']];const ins=[...liabSec.querySelectorAll('input[type=text]')];lkeys.forEach(([bk,pk],i)=>{if(ins[i*2])formData[bk]=ins[i*2].value;if(ins[i*2+1])formData[pk]=ins[i*2+1].value;});}
+    const oblSec=[...document.querySelectorAll('.section')].find(s=>s.textContent.includes('Monthly obligations'));
+    if(oblSec){const okeys=['obl_rent','obl_condo','obl_proptax','obl_loans','obl_support','obl_heat1','obl_heat2'];oblSec.querySelectorAll('input[type=text]').forEach((el,i)=>{if(okeys[i])formData[okeys[i]]=el.value;});}
+  }
+  if(current===5){
+    [1,2,3,4].forEach(i=>{
+      const card=document.querySelectorAll('.ben-card')[i-1];
+      if(!card)return;
+      const ins=[...card.querySelectorAll('input[type=text],input[type=email],input[type=tel],input[type=date]')];
+      if(ins[0])formData['ben'+i+'_name']=ins[0].value;if(ins[1])formData['ben'+i+'_alloc']=ins[1].value;if(ins[2])formData['ben'+i+'_email']=ins[2].value;if(ins[3])formData['ben'+i+'_phone']=ins[3].value;if(ins[4])formData['ben'+i+'_addr']=ins[4].value;if(ins[5])formData['ben'+i+'_dob']=ins[5].value;if(ins[6])formData['ben'+i+'_tname']=ins[6].value;if(ins[7])formData['ben'+i+'_taddr']=ins[7].value;if(ins[8])formData['ben'+i+'_temail']=ins[8].value;if(ins[9])formData['ben'+i+'_tphone']=ins[9].value;
+    });
+  }
+}
+
+// ─── COLLECT ALL FIELDS FOR PAYLOAD ──────────────────────────────────────────
+function collectAllFields(){
+  return{
+    firstName:val('f_first')||formData.f_first||'',middleName:val('f_middle')||formData.f_middle||'',lastName:val('f_last')||formData.f_last||'',
+    sex:getRadio('sex'),preferredLanguage:getRadio('lang'),
+    cellPhone:val('f_cell')||formData.f_cell||'',email:val('f_email')||formData.f_email||'',dob:val('f_dob')||formData.f_dob||'',
+    streetAddress:formData.streetAddress||'',city:formData.city||'',province:formData.province||'',postalCode:formData.postalCode||'',
+    housingStatus:getRadio('housing'),yearsAtAddress:formData.yearsAtAddress||'',
+    driversLicenseNumber:formData.dlNumber||'',driversLicenseProvince:formData.dlProvince||'',driversLicenseIssueDate:formData.dlIssue||'',driversLicenseExpiryDate:formData.dlExpiry||'',
+    secondaryIdType:getRadio('id2type'),secondaryIdNumber:formData.id2Number||'',secondaryIdIssueDate:formData.id2Issue||'',secondaryIdIssuancePlace:formData.id2Place||'',secondaryIdExpiryDate:formData.id2Expiry||'',
+    sin:formData.sin||'',
+    employerName:formData.employerName||'',jobTitle:formData.jobTitle||'',employerAddress:formData.employerAddress||'',employerCity:formData.employerCity||'',employerProvince:formData.employerProvince||'',employerPostalCode:formData.employerPostal||'',employerPhone:formData.employerPhone||'',yearsAtEmployer:formData.yearsAtEmployer||'',
+    occupation:formData.occupation||'',employmentStatus:getRadio('empstatus'),industry:formData.industry||'',annualIncome:formData.annualIncome||'',jobDuties:formData.jobDuties||'',
+    taxResidentCanada:getRadio('taxca'),taxResidentUS:getRadio('taxus'),taxResidentOther:getRadio('taxother'),
+    isPEDP:getRadio('pedp'),isHIO:getRadio('hio'),sinConsent:getRadio('sinconsent'),hasBankruptcy:getRadio('bankrupt'),hasLawsuits:getRadio('lawsuits'),hasSupportPayments:getRadio('support'),
+    assets:{cashAccounts:formData.asset_cash||'',gicsAndTBills:formData.asset_gic||'',registeredInvestments:formData.asset_rrsp||'',tfsa:formData.asset_tfsa||'',nonRegisteredInvestments:formData.asset_nonreg||'',primaryResidence:formData.asset_primaryres||'',otherRealEstate:formData.asset_otherreal||'',pensions:formData.asset_pension||'',vehicles:formData.asset_vehicles||'',lifeInsuranceCashValue:formData.asset_lifeins||'',leverageLoanAssets:formData.asset_leverage||'',otherAssets:formData.asset_other||''},
+    liabilities:{loans:{balance:formData.liab_loans_bal||'',monthlyPayment:formData.liab_loans_pmt||''},mortgage:{balance:formData.liab_mort_bal||'',monthlyPayment:formData.liab_mort_pmt||''},otherMortgage:{balance:formData.liab_mortother_bal||'',monthlyPayment:formData.liab_mortother_pmt||''},lineOfCredit:{balance:formData.liab_loc_bal||'',monthlyPayment:formData.liab_loc_pmt||''},creditCard:{balance:formData.liab_cc_bal||'',monthlyPayment:formData.liab_cc_pmt||''},unpaidIncomeTax:{balance:formData.liab_tax_bal||'',monthlyPayment:formData.liab_tax_pmt||''},propertyTaxArrears:{balance:formData.liab_proptax_bal||'',monthlyPayment:formData.liab_proptax_pmt||''},investmentLoan:{balance:formData.liab_invloan_bal||'',monthlyPayment:formData.liab_invloan_pmt||''},vehicleLoan:{balance:formData.liab_carloan_bal||'',monthlyPayment:formData.liab_carloan_pmt||''},other:{balance:formData.liab_other_bal||'',monthlyPayment:formData.liab_other_pmt||''}},
+    monthlyObligations:{rentOrMortgage:formData.obl_rent||'',condoFees:formData.obl_condo||'',propertyTaxes:formData.obl_proptax||'',otherLoanPayments:formData.obl_loans||'',supportOrAlimony:formData.obl_support||'',heatAndHydroPrimary:formData.obl_heat1||'',heatAndHydroOther:formData.obl_heat2||''},
+    beneficiaries:[1,2,3,4].map(i=>({fullName:formData['ben'+i+'_name']||'',relationship:getRadio('rel'+i),allocation:formData['ben'+i+'_alloc']||'',email:formData['ben'+i+'_email']||'',phone:formData['ben'+i+'_phone']||'',address:formData['ben'+i+'_addr']||'',isUnder18:getRadio('under18_'+i),dob:formData['ben'+i+'_dob']||'',trusteeName:formData['ben'+i+'_tname']||'',trusteeAddress:formData['ben'+i+'_taddr']||'',trusteeEmail:formData['ben'+i+'_temail']||'',trusteePhone:formData['ben'+i+'_tphone']||''})).filter(b=>b.fullName!=='')
+  };
+}
+
+// ─── SUBMIT ───────────────────────────────────────────────────────────────────
+async function submitForm(){
+  snapshotCurrentStep();
+  if(!validateStep(5)) return;
+
+  const btn=document.getElementById('btn-submit');
+  const spinner=document.getElementById('submit-spinner');
+  const errBox=document.getElementById('submit-error');
+
+  if(document.querySelector('.upload-error')){
+    errBox.textContent='Please fix the file size errors above before submitting.';
+    errBox.style.display='block';
+    return;
+  }
+
+  btn.disabled=true;
+  spinner.style.display='inline-block';
+  btn.childNodes[1].textContent=' Submitting…';
+  errBox.style.display='none';
+
+  try{
+    const [dlFront,dlBack,id2Front,id2Back,voidCheque]=await Promise.all([encodeFileGroup('dl-front'),encodeFileGroup('dl-back'),encodeFileGroup('id2-front'),encodeFileGroup('id2-back'),encodeFileGroup('void-cheque')]);
+    const payload={...collectAllFields(),submittedAt:new Date().toISOString(),documents:{driversLicenceFront:dlFront,driversLicenceBack:dlBack,secondaryIdFront:id2Front,secondaryIdBack:id2Back,bankingDocument:voidCheque}};
+
+    if(POWER_AUTOMATE_URL==='YOUR_POWER_AUTOMATE_WEBHOOK_URL_HERE'){
+      console.log('📋 iWIN KYC Payload (dev mode):', payload);
+      showSuccess();
+      return;
+    }
+
+    const response=await fetch(POWER_AUTOMATE_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    if(!response.ok) throw new Error('Status '+response.status);
+    showSuccess();
+  }catch(err){
+    console.error('Submission error:',err);
+    btn.disabled=false;
+    spinner.style.display='none';
+    btn.childNodes[1].textContent=' Submit to iWIN';
+    errBox.innerHTML='⚠️ Submission failed. Please try again or contact <a href="mailto:iwin@infinitywealth.ca" style="color:#c53030">iwin@infinitywealth.ca</a> directly.';
+    errBox.style.display='block';
+  }
+}
+
+function showSuccess(){
+  document.getElementById('main-form').style.display='none';
+  document.getElementById('success-screen').style.display='block';
+  window.scrollTo(0,0);
+}
+
+renderStep();
+</script>
+</body>
+</html>
