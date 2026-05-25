@@ -180,7 +180,7 @@ function stepHTML(idx){
         </div>
         <div class="field-row">
           <div class="field-group"><label class="fl">Housing status <span class="req">*</span></label>${radioGroup('housing',['Homeowner','Renting','Living with parents'])}</div>
-          <div class="field-group"><label class="fl">Years at this address</label><input type="text" placeholder="e.g. 3 years, 6 months"></div>
+          <div class="field-group"><label class="fl">Years at this address <span class="req">*</span></label><input type="text" placeholder="e.g. 3 years, 6 months"></div>
         </div>
       </div>`;
     case 1:return`
@@ -265,10 +265,10 @@ function stepHTML(idx){
       <p class="step-sub">This helps us understand your income profile and recommend the right solutions for you.</p>
       <div class="section"><p class="section-title">Current employer</p>
         <div class="field-row">
-          <div class="field-group"><label class="fl">Employer name</label><input type="text" placeholder="Acme Corp (or Self-employed)"></div>
-          <div class="field-group"><label class="fl">Job title</label><input type="text" placeholder="e.g. Software Engineer"></div>
+          <div class="field-group"><label class="fl">Employer name <span class="req">*</span> <span style="font-weight:400;font-size:10px;color:#888">(if Employed)</span></label><input type="text" placeholder="Acme Corp (or Self-employed)"></div>
+          <div class="field-group"><label class="fl">Job title <span class="req">*</span> <span style="font-weight:400;font-size:10px;color:#888">(if Employed)</span></label><input type="text" placeholder="e.g. Software Engineer"></div>
         </div>
-        <div class="field-row one"><div class="field-group"><label class="fl">Employer address</label><input type="text"></div></div>
+        <div class="field-row one"><div class="field-group"><label class="fl">Employer address <span class="req">*</span> <span style="font-weight:400;font-size:10px;color:#888">(if Employed)</span></label><input type="text"></div></div>
         <div class="field-row three">
           <div class="field-group"><label class="fl">City</label><input type="text"></div>
           <div class="field-group"><label class="fl">Province</label><input type="text"></div>
@@ -276,7 +276,7 @@ function stepHTML(idx){
         </div>
         <div class="field-row">
           <div class="field-group"><label class="fl">Employer phone</label><input type="tel"></div>
-          <div class="field-group"><label class="fl">Years at this employer</label><input type="text" placeholder="e.g. 5 years"></div>
+          <div class="field-group"><label class="fl">Years at this employer <span class="req">*</span> <span style="font-weight:400;font-size:10px;color:#888">(if Employed)</span></label><input type="text" placeholder="e.g. 5 years"></div>
         </div>
       </div>
       <div class="section"><p class="section-title">Role &amp; income</p>
@@ -377,6 +377,7 @@ function stepHTML(idx){
         </div>
         <button class="btn-submit" id="btn-submit" onclick="submitForm()"><span class="submit-spinner" id="submit-spinner"></span>&#9993; Submit to iWIN</button>
         <div class="submit-error" id="submit-error"></div>
+        <p style="font-size:12px;color:#999;margin-top:1rem;line-height:1.6">Once integrated with Karbon, your data will flow directly into your client file automatically.</p>
       </div>`;
   }
 }
@@ -506,6 +507,7 @@ function validateStep(idx){
       if(!ins[1]?.value.trim()){ errors.push('City'); showFieldError(ins[1],'City is required'); }
       if(!ins[2]?.value.trim()){ errors.push('Province'); showFieldError(ins[2],'Province is required'); }
       if(!ins[3]?.value.trim()){ errors.push('Postal code'); showFieldError(ins[3],'Postal code is required'); }
+      if(!ins[4]?.value.trim()){ errors.push('Years at this address'); showFieldError(ins[4],'Years at this address is required'); }
     }
     reqRadio('housing','Housing status');
   }
@@ -542,17 +544,22 @@ function validateStep(idx){
   if(idx===2){
     reqRadio('empstatus','Employment status');
     const status = getRadio('empstatus');
-    const needsEmployer = (status==='Employed'||status==='Self-employed'||status==='Other'||status==='');
-    // Employer fields only required if Employed/Self-employed/Other
-    if(needsEmployer && status !== ''){
-      // employer name only
+    const isEmployed = (status==='Employed');
+    // Employer name, job title, employer address, years at employer —
+    // required ONLY when status is Employed
+    if(isEmployed){
       const empSec = document.querySelectorAll('.section')[0];
       if(empSec){
         const ins = [...empSec.querySelectorAll('input[type=text],input[type=tel]')];
         if(!ins[0]?.value.trim()){ errors.push('Employer name'); showFieldError(ins[0],'Employer name is required'); }
+        if(!ins[1]?.value.trim()){ errors.push('Job title'); showFieldError(ins[1],'Job title is required'); }
+        // Employer address is a one-col row — ins[2]
+        if(!ins[2]?.value.trim()){ errors.push('Employer address'); showFieldError(ins[2],'Employer address is required'); }
+        // Years at employer — ins[7]
+        if(!ins[7]?.value.trim()){ errors.push('Years at this employer'); showFieldError(ins[7],'Years at this employer is required'); }
       }
     }
-    // Always required
+    // Always required regardless of status
     const roleSec = document.querySelectorAll('.section')[1];
     if(roleSec){
       const ins = [...roleSec.querySelectorAll('input[type=text]')];
