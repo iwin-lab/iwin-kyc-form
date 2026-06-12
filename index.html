@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -863,15 +863,20 @@ async function submitForm(){
       return;
     }
 
-  await fetch(POWER_AUTOMATE_URL,{
+    const response = await fetch(POWER_AUTOMATE_URL,{
       method:'POST',
-      mode:'no-cors',
       headers:{
-        'Content-Type':'text/plain'
+        'Content-Type':'application/json',
+        'Access-Control-Allow-Origin':'*'
       },
       body:JSON.stringify(payload)
     });
-    showSuccess();
+    // Power Automate returns 202 Accepted for successful triggers
+    if(response.status === 202 || response.status === 200 || response.status === 0){
+      showSuccess();
+    } else {
+      throw new Error('Status '+response.status);
+    }
   }catch(err){
     console.error('Submission error:',err);
     btn.disabled=false;
