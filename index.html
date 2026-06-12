@@ -863,20 +863,15 @@ async function submitForm(){
       return;
     }
 
-   await fetch(POWER_AUTOMATE_URL,{
-  method:'POST',
-  mode:'no-cors',
-  headers:{
-    'Content-Type':'text/plain'
-  },
-  body:JSON.stringify(payload)
-});
-    // Power Automate returns 202 Accepted for successful triggers
-    if(response.status === 202 || response.status === 200 || response.status === 0){
-      showSuccess();
-    } else {
-      throw new Error('Status '+response.status);
-    }
+  await fetch(POWER_AUTOMATE_URL,{
+      method:'POST',
+      mode:'no-cors',
+      headers:{
+        'Content-Type':'text/plain'
+      },
+      body:JSON.stringify(payload)
+    });
+    showSuccess();
   }catch(err){
     console.error('Submission error:',err);
     btn.disabled=false;
