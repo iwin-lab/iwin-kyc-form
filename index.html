@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -161,8 +161,10 @@ function checkYearsAtAddress(){
   const val=document.getElementById('f_years_address')?.value?.trim()||'';
   const prevSection=document.getElementById('prev-addr-section');
   if(!prevSection) return;
-  const num=parseFloat(val);
-  if(!isNaN(num) && num < 2){
+  const year=parseInt(val);
+  const currentYear=new Date().getFullYear();
+  // Show previous address if they moved in 2024 or later (less than 2 full years ago)
+  if(year && year >= 2024 && year <= currentYear){
     prevSection.style.display='block';
   } else {
     prevSection.style.display='none';
@@ -214,10 +216,10 @@ function stepHTML(idx){
         </div>
         <div class="field-row">
           <div class="field-group"><label class="fl">Housing status <span class="req">*</span></label>${radioGroup('housing',['Homeowner','Renting','Living with parents'])}</div>
-          <div class="field-group"><label class="fl">Years at this address <span class="req">*</span></label><input type="text" id="f_years_address" placeholder="e.g. 3 years, 6 months" oninput="checkYearsAtAddress()"></div>
+          <div class="field-group"><label class="fl">When did you start living at this address? <span class="req">*</span></label><input type="number" id="f_years_address" min="1950" max="2026" placeholder="e.g. 2012, 2020, 2026" oninput="checkYearsAtAddress()"><p class="tip">Enter the year you moved in</p></div>
         </div>
         <div id="prev-addr-section" class="conditional-section" style="display:none">
-          <p style="font-size:12px;font-weight:600;color:#7a5f00;margin-bottom:8px">&#9432; Since you have been at this address less than 2 years, please provide your previous address</p>
+          <p style="font-size:12px;font-weight:600;color:#7a5f00;margin-bottom:8px">&#9432; Since you moved here in 2024 or later, please provide your previous address</p>
           <div class="field-row one"><div class="field-group"><label class="fl">Previous street address</label><input type="text" id="prev_addr_street" placeholder="123 Previous St"></div></div>
           <div class="field-row three">
             <div class="field-group"><label class="fl">City</label><input type="text" id="prev_addr_city" placeholder="City"></div>
@@ -542,13 +544,16 @@ function validateStep(idx){
       if(!ins[1]?.value.trim()){ errors.push('City'); showFieldError(ins[1],'City is required'); }
       if(!ins[2]?.value.trim()){ errors.push('Province'); showFieldError(ins[2],'Province is required'); }
       if(!ins[3]?.value.trim()){ errors.push('Postal code'); showFieldError(ins[3],'Postal code is required'); }
-      if(!ins[4]?.value.trim()){ errors.push('Years at this address'); showFieldError(ins[4],'Years at this address is required'); }
     }
+    // Address start year — validated by ID
+    const addrYearEl = document.getElementById('f_years_address');
+    const addrYearVal = addrYearEl?.value?.trim()||'';
+    if(!addrYearVal){ errors.push('Year you moved in'); showFieldError(addrYearEl,'Please enter the year you moved in'); }
     reqRadio('housing','Housing status');
-    // Previous address required if years at address < 2
-    const yearsVal = document.getElementById('f_years_address')?.value?.trim()||'';
-    const yearsNum = parseFloat(yearsVal);
-    if(!isNaN(yearsNum) && yearsNum < 2){
+    // Previous address required if moved in 2024 or later
+    const addrYear = parseInt(addrYearVal);
+    const thisYear = new Date().getFullYear();
+    if(addrYear && addrYear >= 2024 && addrYear <= thisYear){
       const prevStreet = document.getElementById('prev_addr_street')?.value.trim()||'';
       const prevCity = document.getElementById('prev_addr_city')?.value.trim()||'';
       if(!prevStreet){ errors.push('Previous address — street'); showFieldError(document.getElementById('prev_addr_street'),'Previous street address is required'); }
@@ -877,8 +882,8 @@ function snapshotCurrentStep(){
 
 // ─── COLLECT ALL FIELDS FOR PAYLOAD ──────────────────────────────────────────
 function collectAllFields(){
-  const yearsAtAddr = parseFloat(formData.yearsAtAddress) || 99;
-  const isRecentResident = yearsAtAddr < 2;
+  const addrStartYear = parseInt(formData.yearsAtAddress) || 0;
+  const isRecentResident = addrStartYear >= 2024 && addrStartYear <= new Date().getFullYear();
   return{
     firstName:val('f_first')||formData.f_first||'',
     middleName:val('f_middle')||formData.f_middle||'',
