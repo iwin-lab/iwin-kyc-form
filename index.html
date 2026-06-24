@@ -157,17 +157,22 @@ function setRadio(el){
   }
 }
 
-function checkTaxSinceYear(){
-  const yearInput=document.getElementById('tax_since_year');
-  const prevAddrSection=document.getElementById('prev-addr-section');
-  if(!yearInput||!prevAddrSection) return;
-  const year=parseInt(yearInput.value);
-  const currentYear=new Date().getFullYear();
-  if(year && currentYear - year < 2){
-    prevAddrSection.style.display='block';
+function checkYearsAtAddress(){
+  const val=document.getElementById('f_years_address')?.value?.trim()||'';
+  const prevSection=document.getElementById('prev-addr-section');
+  if(!prevSection) return;
+  const num=parseFloat(val);
+  if(!isNaN(num) && num < 2){
+    prevSection.style.display='block';
   } else {
-    prevAddrSection.style.display='none';
+    prevSection.style.display='none';
   }
+}
+
+function checkTaxSinceYear(){
+  // Show/hide tax year input based on taxca Yes/No — no previous address logic here
+  const f=document.getElementById('taxca-year-row');
+  if(f) f.style.display='block';
 }
 
 function stepHTML(idx){
@@ -209,7 +214,16 @@ function stepHTML(idx){
         </div>
         <div class="field-row">
           <div class="field-group"><label class="fl">Housing status <span class="req">*</span></label>${radioGroup('housing',['Homeowner','Renting','Living with parents'])}</div>
-          <div class="field-group"><label class="fl">Years at this address <span class="req">*</span></label><input type="text" placeholder="e.g. 3 years, 6 months"></div>
+          <div class="field-group"><label class="fl">Years at this address <span class="req">*</span></label><input type="text" id="f_years_address" placeholder="e.g. 3 years, 6 months" oninput="checkYearsAtAddress()"></div>
+        </div>
+        <div id="prev-addr-section" class="conditional-section" style="display:none">
+          <p style="font-size:12px;font-weight:600;color:#7a5f00;margin-bottom:8px">&#9432; Since you have been at this address less than 2 years, please provide your previous address</p>
+          <div class="field-row one"><div class="field-group"><label class="fl">Previous street address</label><input type="text" id="prev_addr_street" placeholder="123 Previous St"></div></div>
+          <div class="field-row three">
+            <div class="field-group"><label class="fl">City</label><input type="text" id="prev_addr_city" placeholder="City"></div>
+            <div class="field-group"><label class="fl">Province / State</label><input type="text" id="prev_addr_province" placeholder="Province"></div>
+            <div class="field-group"><label class="fl">Country</label><input type="text" id="prev_addr_country" placeholder="Country"></div>
+          </div>
         </div>
       </div>`;
     case 1:return`
@@ -330,20 +344,11 @@ function stepHTML(idx){
           <div class="field-group">
             <label class="fl">Are you a tax resident of Canada? <span class="req">*</span></label>
             ${yesNo('taxca')}
-            <div id="taxca-yes-fields" style="display:none;margin-top:10px">
+            <div id="taxca-year-row" style="display:none;margin-top:10px">
               <label class="fl" style="margin-bottom:4px">I have been a tax resident of Canada since: <span class="req">*</span></label>
               <div class="tax-since-row">
-                <input type="number" id="tax_since_year" min="1950" max="2026" placeholder="e.g. 2019" style="width:110px" oninput="checkTaxSinceYear()">
+                <input type="number" id="tax_since_year" min="1950" max="2026" placeholder="e.g. 2019" style="width:110px">
                 <span style="font-size:12px;color:#888">(enter the year)</span>
-              </div>
-              <div class="conditional-section" id="prev-addr-section">
-                <p style="font-size:12px;font-weight:600;color:#7a5f00;margin-bottom:8px">&#9432; Since this is less than 2 years ago, please provide your previous address</p>
-                <div class="field-row one"><div class="field-group"><label class="fl">Previous street address</label><input type="text" id="prev_addr_street" placeholder="123 Previous St"></div></div>
-                <div class="field-row three">
-                  <div class="field-group"><label class="fl">City</label><input type="text" id="prev_addr_city" placeholder="City"></div>
-                  <div class="field-group"><label class="fl">Province / State</label><input type="text" id="prev_addr_province" placeholder="Province"></div>
-                  <div class="field-group"><label class="fl">Country</label><input type="text" id="prev_addr_country" placeholder="Country"></div>
-                </div>
               </div>
             </div>
           </div>
@@ -540,6 +545,15 @@ function validateStep(idx){
       if(!ins[4]?.value.trim()){ errors.push('Years at this address'); showFieldError(ins[4],'Years at this address is required'); }
     }
     reqRadio('housing','Housing status');
+    // Previous address required if years at address < 2
+    const yearsVal = document.getElementById('f_years_address')?.value?.trim()||'';
+    const yearsNum = parseFloat(yearsVal);
+    if(!isNaN(yearsNum) && yearsNum < 2){
+      const prevStreet = document.getElementById('prev_addr_street')?.value.trim()||'';
+      const prevCity = document.getElementById('prev_addr_city')?.value.trim()||'';
+      if(!prevStreet){ errors.push('Previous address — street'); showFieldError(document.getElementById('prev_addr_street'),'Previous street address is required'); }
+      if(!prevCity){ errors.push('Previous address — city'); showFieldError(document.getElementById('prev_addr_city'),'City is required'); }
+    }
   }
 
   // ── STEP 1 ───────────────────────────────────────────────────────────────────
@@ -602,14 +616,6 @@ function validateStep(idx){
       if(!year || year < 1900 || year > currentYear){
         errors.push('Tax residency year');
         if(yearEl) showFieldError(yearEl,'Please enter a valid year (e.g. 2019)');
-      } else {
-        // If < 2 years, require previous address
-        if(currentYear - year < 2){
-          const prevStreet = document.getElementById('prev_addr_street')?.value.trim()||'';
-          const prevCity = document.getElementById('prev_addr_city')?.value.trim()||'';
-          if(!prevStreet){ errors.push('Previous address — street'); showFieldError(document.getElementById('prev_addr_street'),'Previous street address is required'); }
-          if(!prevCity){ errors.push('Previous address — city'); showFieldError(document.getElementById('prev_addr_city'),'City is required'); }
-        }
       }
     }
     reqRadio('taxus','Tax resident of United States');
@@ -697,33 +703,36 @@ function renderStep(){
       if(ms) ms.style.display='block';
     }
   });
-  // Restore tax residency UI
+  // Restore tax residency UI (Step 3)
   if(current===3){
     if(getRadio('taxca')==='Yes'){
-      const f=document.getElementById('taxca-yes-fields');
+      const f=document.getElementById('taxca-year-row');
       if(f) f.style.display='block';
       if(formData.taxSinceYear){
         const el=document.getElementById('tax_since_year');
-        if(el){ el.value=formData.taxSinceYear; checkTaxSinceYear(); }
+        if(el) el.value=formData.taxSinceYear;
       }
-      if(formData.prevAddrStreet){ const el=document.getElementById('prev_addr_street'); if(el) el.value=formData.prevAddrStreet; }
-      if(formData.prevAddrCity){ const el=document.getElementById('prev_addr_city'); if(el) el.value=formData.prevAddrCity; }
-      if(formData.prevAddrProvince){ const el=document.getElementById('prev_addr_province'); if(el) el.value=formData.prevAddrProvince; }
-      if(formData.prevAddrCountry){ const el=document.getElementById('prev_addr_country'); if(el) el.value=formData.prevAddrCountry; }
     }
+  }
+  // Restore previous address state (Step 0)
+  if(current===0){
+    if(formData.yearsAtAddress){
+      const el=document.getElementById('f_years_address');
+      if(el){ el.value=formData.yearsAtAddress; checkYearsAtAddress(); }
+    }
+    if(formData.prevAddrStreet){ const el=document.getElementById('prev_addr_street'); if(el) el.value=formData.prevAddrStreet; }
+    if(formData.prevAddrCity){ const el=document.getElementById('prev_addr_city'); if(el) el.value=formData.prevAddrCity; }
+    if(formData.prevAddrProvince){ const el=document.getElementById('prev_addr_province'); if(el) el.value=formData.prevAddrProvince; }
+    if(formData.prevAddrCountry){ const el=document.getElementById('prev_addr_country'); if(el) el.value=formData.prevAddrCountry; }
   }
   window.scrollTo(0,0);
 }
 
-// Show/hide the "tax since year" field when Yes is selected
+// Show/hide the "tax since year" field when taxca Yes/No is selected
 document.addEventListener('click', function(e){
   if(e.target.classList.contains('radio-btn') && e.target.dataset.name==='taxca'){
-    const f=document.getElementById('taxca-yes-fields');
+    const f=document.getElementById('taxca-year-row');
     if(f) f.style.display = e.target.dataset.val==='Yes' ? 'block' : 'none';
-    if(e.target.dataset.val!=='Yes'){
-      const ps=document.getElementById('prev-addr-section');
-      if(ps) ps.style.display='none';
-    }
   }
 });
 
@@ -823,8 +832,14 @@ function snapshotCurrentStep(){
       if(ins[1])formData.city=ins[1].value;
       if(ins[2])formData.province=ins[2].value;
       if(ins[3])formData.postalCode=ins[3].value;
-      if(ins[4])formData.yearsAtAddress=ins[4].value;
     }
+    // Years at address via ID
+    snap('f_years_address','yearsAtAddress');
+    // Previous address fields
+    snap('prev_addr_street','prevAddrStreet');
+    snap('prev_addr_city','prevAddrCity');
+    snap('prev_addr_province','prevAddrProvince');
+    snap('prev_addr_country','prevAddrCountry');
   }
   if(current===1){
     const sec=document.querySelectorAll('.section');
@@ -838,17 +853,9 @@ function snapshotCurrentStep(){
     if(sec[1]){const ins=[...sec[1].querySelectorAll('input')];if(ins[0])formData.occupation=ins[0].value;if(ins[1])formData.industry=ins[1].value;if(ins[2])formData.annualIncome=ins[2].value;const ta=sec[1].querySelector('textarea');if(ta)formData.jobDuties=ta.value;}
   }
   if(current===3){
-    // Tax residency year + previous address
+    // Tax residency year only
     const yearEl=document.getElementById('tax_since_year');
     if(yearEl) formData.taxSinceYear=yearEl.value;
-    const ps=document.getElementById('prev_addr_street');
-    if(ps) formData.prevAddrStreet=ps.value;
-    const pc=document.getElementById('prev_addr_city');
-    if(pc) formData.prevAddrCity=pc.value;
-    const pp=document.getElementById('prev_addr_province');
-    if(pp) formData.prevAddrProvince=pp.value;
-    const pco=document.getElementById('prev_addr_country');
-    if(pco) formData.prevAddrCountry=pco.value;
   }
   if(current===4){
     const assetSec=[...document.querySelectorAll('.section')].find(s=>s.textContent.includes('what you own'));
@@ -870,9 +877,8 @@ function snapshotCurrentStep(){
 
 // ─── COLLECT ALL FIELDS FOR PAYLOAD ──────────────────────────────────────────
 function collectAllFields(){
-  const currentYear = new Date().getFullYear();
-  const taxSinceYear = parseInt(formData.taxSinceYear)||null;
-  const isRecentResident = taxSinceYear && (currentYear - taxSinceYear < 2);
+  const yearsAtAddr = parseFloat(formData.yearsAtAddress) || 99;
+  const isRecentResident = yearsAtAddr < 2;
   return{
     firstName:val('f_first')||formData.f_first||'',
     middleName:val('f_middle')||formData.f_middle||'',
