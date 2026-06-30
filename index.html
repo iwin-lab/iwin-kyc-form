@@ -441,8 +441,7 @@ function stepHTML(idx){
 }
 
 // ─── POWER AUTOMATE WEBHOOK URL ───────────────────────────────────────────────
-const POWER_AUTOMATE_URL = 'https://default95c00780be724754b2dad597d483e6.5b.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e757dff071bf448aae5a45c9f6263a92/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hdG2l-q45FhUAvExy1rIOfYMnBL8bCC0ctozUt87cpM';
-
+const NETLIFY_FUNCTION_URL = '/.netlify/functions/submit-kyc';
 // ─── FILE SIZE LIMITS ─────────────────────────────────────────────────────────
 const FILE_LIMITS = {
   'dl-front':    2 * 1024 * 1024,
@@ -984,15 +983,16 @@ async function submitForm(){
       }
     };
 
-    const response = await fetch(POWER_AUTOMATE_URL,{
+const response = await fetch(NETLIFY_FUNCTION_URL,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify(payload)
     });
-    if(response.status===202||response.status===200||response.status===0){
+    const result = await response.json();
+    if(response.ok && result.success){
       showSuccess();
     } else {
-      throw new Error('Status '+response.status);
+      throw new Error('Submission failed: ' + (result.detail || result.error || 'Unknown error'));
     }
   }catch(err){
     console.error('Submission error:',err);
