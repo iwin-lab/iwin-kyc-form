@@ -1000,9 +1000,7 @@ let result = {};
     btn.disabled=false;
     spinner.style.display='none';
     btn.childNodes[1].textContent=' Submit to iWIN';
-    errBox.innerHTML='⚠️ Submission failed. Please try again or contact <a href="mailto:iwin@infinitywealth.ca" style="color:#c53030">iwin@infinitywealth.ca</a> directly.';
-    errBox.style.display='block';
-  }
+errBox.innerHTML='⚠️ ' + err.message;  }
 }
 
 function showSuccess(){
