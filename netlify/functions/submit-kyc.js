@@ -5,8 +5,7 @@
 // CORS does not apply — only browser-to-server requests are subject
 // to CORS, not server-to-server requests.
 
-const POWER_AUTOMATE_URL = 'https://default95c00780be724754b2dad597d483e6.5b.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/e757dff071bf448aae5a45c9f6263a92/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hdG2l-q45FhUAvExy1rIOfYMnBL8bCC0ctozUt87cpM';
-
+const POWER_AUTOMATE_URL = 'https://default95c00780be724754b2dad597d483e6.5b.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/25/workflows/e757dff071bf448aae5a45c9f6263a92/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hdG2l-q45FhUAvExy1rIOfYMnBL8bCC0ctozUt87cpM';
 exports.handler = async function (event) {
   // Only allow POST requests
   if (event.httpMethod !== 'POST') {
