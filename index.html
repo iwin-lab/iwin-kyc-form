@@ -988,11 +988,12 @@ const response = await fetch(NETLIFY_FUNCTION_URL,{
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify(payload)
     });
-    const result = await response.json();
+let result = {};
+    try { result = await response.json(); } catch(e) {}
     if(response.ok && result.success){
       showSuccess();
     } else {
-      throw new Error('Submission failed: ' + (result.detail || result.error || 'Unknown error'));
+      throw new Error('Submission failed: ' + JSON.stringify(result));
     }
   }catch(err){
     console.error('Submission error:',err);
