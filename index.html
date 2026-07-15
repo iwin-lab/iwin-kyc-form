@@ -267,7 +267,7 @@ function stepHTML(idx){
               <input type="file" accept="image/*,application/pdf" onchange="handleUpload(this,'dl-front')" multiple>
               <div class="up-icon">&#128247;</div>
               <div class="up-label">Upload or take photo</div>
-              <div class="up-sub">JPG, PNG, PDF &bull; max 2MB</div>
+              <div class="up-sub">JPG, PNG, PDF &bull; max 800KB</div>
             </div>
             <div class="upload-preview" id="prev-dl-front"></div>
           </div>
@@ -277,7 +277,7 @@ function stepHTML(idx){
               <input type="file" accept="image/*,application/pdf" onchange="handleUpload(this,'dl-back')" multiple>
               <div class="up-icon">&#128247;</div>
               <div class="up-label">Upload or take photo</div>
-              <div class="up-sub">JPG, PNG, PDF &bull; max 2MB</div>
+              <div class="up-sub">JPG, PNG, PDF &bull; max 800KB</div>
             </div>
             <div class="upload-preview" id="prev-dl-back"></div>
           </div>
@@ -289,7 +289,7 @@ function stepHTML(idx){
               <input type="file" accept="image/*,application/pdf" onchange="handleUpload(this,'id2-front')" multiple>
               <div class="up-icon">&#128247;</div>
               <div class="up-label">Upload or take photo</div>
-              <div class="up-sub">JPG, PNG, PDF &bull; max 2MB</div>
+              <div class="up-sub">JPG, PNG, PDF &bull; max 800KB</div>
             </div>
             <div class="upload-preview" id="prev-id2-front"></div>
           </div>
@@ -299,13 +299,13 @@ function stepHTML(idx){
               <input type="file" accept="image/*,application/pdf" onchange="handleUpload(this,'id2-back')" multiple>
               <div class="up-icon">&#128247;</div>
               <div class="up-label">Upload or take photo</div>
-              <div class="up-sub">JPG, PNG, PDF &bull; max 2MB</div>
+              <div class="up-sub">JPG, PNG, PDF &bull; max 800KB</div>
             </div>
             <div class="upload-preview" id="prev-id2-back"></div>
           </div>
         </div>
         <div style="background:#fffbe6;border:1px solid #f5e090;border-radius:8px;padding:10px 12px;margin-top:8px;font-size:12px;color:#7a5f00;line-height:1.6">
-          <strong>&#128247; Tip for mobile users:</strong> If your photo is over 2MB, try selecting it from your gallery and cropping or compressing it first, or use your banking app to take a lower-resolution scan.
+          <strong>&#128247; Tip for mobile users:</strong> If your photo is over 800KB, try selecting it from your gallery and cropping or compressing it first, or use your banking app to take a lower-resolution scan.
         </div>
       </div>`;
     case 2:return`
@@ -444,14 +444,14 @@ function stepHTML(idx){
 const NETLIFY_FUNCTION_URL = '/.netlify/functions/submit-kyc';
 // ─── FILE SIZE LIMITS ─────────────────────────────────────────────────────────
 const FILE_LIMITS = {
-  'dl-front':    2 * 1024 * 1024,
-  'dl-back':     2 * 1024 * 1024,
-  'id2-front':   2 * 1024 * 1024,
-  'id2-back':    2 * 1024 * 1024,
-  'void-cheque': 3 * 1024 * 1024
+  'dl-front':    800 * 1024,
+  'dl-back':     800 * 1024,
+  'id2-front':   800 * 1024,
+  'id2-back':    800 * 1024,
+  'void-cheque': 800 * 1024
 };
 const FILE_LIMIT_LABELS = {
-  'dl-front':'2MB','dl-back':'2MB','id2-front':'2MB','id2-back':'2MB','void-cheque':'3MB'
+  'dl-front':'800KB','dl-back':'800KB','id2-front':'800KB','id2-back':'800KB','void-cheque':'800KB'
 };
 
 // ─── PERSISTED FORM DATA ──────────────────────────────────────────────────────
@@ -764,7 +764,7 @@ const uploadedFiles={};
 function handleUpload(input,key){
   if(!uploadedFiles[key])uploadedFiles[key]=[];
   const limit=FILE_LIMITS[key]||2*1024*1024;
-  const limitLabel=FILE_LIMIT_LABELS[key]||'2MB';
+  const limitLabel=FILE_LIMIT_LABELS[key]||'800KB';
   const uploadArea=input.closest('.upload-area');
   const existingErr=uploadArea.parentElement.querySelector('.upload-error');
   if(existingErr)existingErr.remove();
