@@ -15,16 +15,21 @@ exports.handler = async function (event) {
       body: JSON.stringify({ error: 'Method not allowed' })
     };
   }
+
   try {
+    console.log('Received body size:', event.body ? event.body.length : 0);
+    console.log('Power Automate URL:', POWER_AUTOMATE_URL ? 'SET' : 'NOT SET');
+
     const paResponse = await fetch(POWER_AUTOMATE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: event.body
     });
 
-    const responseText = await paResponse.text();
     console.log('PA status:', paResponse.status);
-    console.log('PA response:', responseText);
+    console.log('PA headers:', JSON.stringify([...paResponse.headers.entries()]));
+    const responseText = await paResponse.text();
+    console.log('PA response body:', responseText || 'EMPTY');
 
     if (paResponse.status === 202 || paResponse.status === 200) {
       return {
@@ -39,7 +44,8 @@ exports.handler = async function (event) {
         body: JSON.stringify({
           success: false,
           status: paResponse.status,
-          detail: responseText || 'No response from Power Automate'
+          detail: responseText || 'EMPTY RESPONSE FROM POWER AUTOMATE',
+          urlSet: !!POWER_AUTOMATE_URL
         })
       };
     }
