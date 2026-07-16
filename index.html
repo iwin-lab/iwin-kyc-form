@@ -264,7 +264,7 @@ function stepHTML(idx){
           <div class="field-group">
             <p class="upload-group-label">Driver's license &#8212; front <span class="req">*</span></p>
             <div class="upload-area" id="ua-dl-front">
-              <input type="file" accept="image/*,application/pdf" onchange="handleUpload(this,'dl-front')" multiple>
+              <input type="file" accept="image/*,application/pdf" onchange="handleUpload(this,'dl-front')" >
               <div class="up-icon">&#128247;</div>
               <div class="up-label">Upload or take photo</div>
               <div class="up-sub">JPG, PNG, PDF &bull; max 800KB</div>
@@ -274,7 +274,7 @@ function stepHTML(idx){
           <div class="field-group">
             <p class="upload-group-label">Driver's license &#8212; back <span class="req">*</span></p>
             <div class="upload-area" id="ua-dl-back">
-              <input type="file" accept="image/*,application/pdf" onchange="handleUpload(this,'dl-back')" multiple>
+              <input type="file" accept="image/*,application/pdf" onchange="handleUpload(this,'dl-back')" >
               <div class="up-icon">&#128247;</div>
               <div class="up-label">Upload or take photo</div>
               <div class="up-sub">JPG, PNG, PDF &bull; max 800KB</div>
@@ -286,7 +286,7 @@ function stepHTML(idx){
           <div class="field-group">
             <p class="upload-group-label">Secondary ID &#8212; front <span class="req">*</span></p>
             <div class="upload-area" id="ua-id2-front">
-              <input type="file" accept="image/*,application/pdf" onchange="handleUpload(this,'id2-front')" multiple>
+              <input type="file" accept="image/*,application/pdf" onchange="handleUpload(this,'id2-front')" >
               <div class="up-icon">&#128247;</div>
               <div class="up-label">Upload or take photo</div>
               <div class="up-sub">JPG, PNG, PDF &bull; max 800KB</div>
@@ -296,7 +296,7 @@ function stepHTML(idx){
           <div class="field-group">
             <p class="upload-group-label">Secondary ID &#8212; back</p>
             <div class="upload-area" id="ua-id2-back">
-              <input type="file" accept="image/*,application/pdf" onchange="handleUpload(this,'id2-back')" multiple>
+              <input type="file" accept="image/*,application/pdf" onchange="handleUpload(this,'id2-back')" >
               <div class="up-icon">&#128247;</div>
               <div class="up-label">Upload or take photo</div>
               <div class="up-sub">JPG, PNG, PDF &bull; max 800KB</div>
@@ -426,7 +426,7 @@ function stepHTML(idx){
           <p class="upload-group-label">Banking document <span class="req">*</span> <span style="font-weight:400;opacity:0.7">(for direct deposit setup)</span></p>
           <p style="font-size:12px;color:#666;margin-bottom:8px;line-height:1.6">Any one of the following works: a <strong>void cheque</strong>, a <strong>pre-authorized debit form</strong> from your bank, or a <strong>direct deposit form / account summary</strong> downloaded from your online banking app. Must show your name, institution, transit number, and account number.</p>
           <div class="upload-area" id="ua-void-cheque">
-            <input type="file" accept="image/*,application/pdf" onchange="handleUpload(this,'void-cheque')" multiple>
+            <input type="file" accept="image/*,application/pdf" onchange="handleUpload(this,'void-cheque')" >
             <div class="up-icon">&#127974;</div>
             <div class="up-label">Upload screenshot, PDF, or photo</div>
             <div class="up-sub">From online banking, your banking app, or a physical cheque &bull; max 800KB</div>
@@ -763,6 +763,11 @@ function getRadio(name){ return formData[name]||''; }
 const uploadedFiles={};
 function handleUpload(input,key){
   if(!uploadedFiles[key])uploadedFiles[key]=[];
+  if(uploadedFiles[key].length >= 1){
+  alert('Only one file is allowed per upload. Please remove the existing file first.');
+  input.value='';
+  return;
+}
   const limit=FILE_LIMITS[key]||2*1024*1024;
   const limitLabel=FILE_LIMIT_LABELS[key]||'800KB';
   const uploadArea=input.closest('.upload-area');
