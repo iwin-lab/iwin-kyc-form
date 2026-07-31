@@ -750,7 +750,7 @@ function goNext(){
 }
 function goBack(){
   if(current>0){
-     Step();
+    snapshotCurrentStep();
     current--;
     renderStep();
   }
