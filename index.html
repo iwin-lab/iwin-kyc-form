@@ -334,7 +334,7 @@ function stepHTML(idx){
         </div>
         <div class="field-row">
           <div class="field-group"><label class="fl">Industry <span class="req">*</span></label><input type="text" placeholder="e.g. Technology, Healthcare"></div>
-          <div class="field-group"><label class="fl">Annual income <span class="req">*</span></label><input type="text" placeholder="e.g. $85,000"></div>
+          <div class="field-group"><label class="fl">Employment income <span class="req">*</span></label><input type="text" placeholder="e.g. $85,000"></div>
         </div>
         <div class="field-row one"><div class="field-group"><label class="fl">Brief description of job duties</label><textarea placeholder="e.g. Manage a software development team, client liaison..."></textarea></div></div>
       </div>`;
@@ -750,7 +750,7 @@ function goNext(){
 }
 function goBack(){
   if(current>0){
-    snapshotCurrentStep();
+     Step();
     current--;
     renderStep();
   }
@@ -859,7 +859,7 @@ function snapshotCurrentStep(){
   if(current===2){
     const sec=document.querySelectorAll('.section');
     if(sec[0]){const ins=[...sec[0].querySelectorAll('input')];if(ins[0])formData.employerName=ins[0].value;if(ins[1])formData.jobTitle=ins[1].value;if(ins[2])formData.employerAddress=ins[2].value;if(ins[3])formData.employerCity=ins[3].value;if(ins[4])formData.employerProvince=ins[4].value;if(ins[5])formData.employerPostal=ins[5].value;if(ins[6])formData.employerPhone=ins[6].value;if(ins[7])formData.yearsAtEmployer=ins[7].value;}
-    if(sec[1]){const ins=[...sec[1].querySelectorAll('input')];if(ins[0])formData.occupation=ins[0].value;if(ins[1])formData.industry=ins[1].value;if(ins[2])formData.annualIncome=ins[2].value;const ta=sec[1].querySelector('textarea');if(ta)formData.jobDuties=ta.value;}
+    if(sec[1]){const ins=[...sec[1].querySelectorAll('input')];if(ins[0])formData.occupation=ins[0].value;if(ins[1])formData.industry=ins[1].value;if(ins[2])formData.annualIncome=ins[2].value; const ta=sec[1].querySelector('textarea');if(ta)formData.jobDuties=ta.value;const ri=document.getElementById('f_rental_income');if(ri)formData.grossRentalIncome=ri.value;}
   }
   if(current===3){
     // Tax residency year only
@@ -926,6 +926,7 @@ function collectAllFields(){
     employmentStatus:getRadio('empstatus'),
     industry:formData.industry||'',
     annualIncome:formData.annualIncome||'',
+    grossRentalIncome: formData.grossRentalIncome||'',
     jobDuties:formData.jobDuties||'',
     taxResidentCanada:getRadio('taxca'),
     taxResidentCanadaSinceYear:formData.taxSinceYear||'',
